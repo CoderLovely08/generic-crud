@@ -50,32 +50,19 @@ export const validateUserData = async (req, res, next) => {
 export const validateUserDataAdvance = (fields) => {
     return async (req, res, next) => {
         try {
-
+            let errorItem = null;
             // Loop through the fields array
             fields.forEach((field) => {
                 if (!req.body[field]) {
-                    return res.status(400).json({
-                        success: false,
-                        message: `${field} is required`,
-                    });
+                    errorItem = field;
+                    return;
                 }
             });
 
-            const { name, email } = req.body;
-
-            // Check if name is provided
-            if (!name || !validator.isAlpha(name)) {
+            if (errorItem) {
                 return res.status(400).json({
                     success: false,
-                    message: "Name is required",
-                });
-            }
-
-            // Check if email is valid
-            if (!email || !validator.isEmail(email)) {
-                return res.status(400).json({
-                    success: false,
-                    message: "Invalid email",
+                    message: `${errorItem} is required`,
                 });
             }
 

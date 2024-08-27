@@ -1,6 +1,12 @@
 import { Router } from "express"; // Import Express Router
-import { validateUserData } from "../middlewares/auth.middleware.js";
-import { handlePostUserRegistration } from "../controllers/auth.controller.js";
+import {
+    validateUserData,
+    validateUserDataAdvance,
+} from "../middlewares/auth.middleware.js";
+import {
+    handlePostUserLogin,
+    handlePostUserRegistration,
+} from "../controllers/auth.controller.js";
 
 const router = Router(); // Create an instance of Express Router
 
@@ -20,9 +26,12 @@ router.get("/", (req, res) => {
 });
 
 // User registration route
+router.route("/register").post(validateUserData, handlePostUserRegistration);
+
+// User login route
 router
-    .route("/register")
-    .post(validateUserData, handlePostUserRegistration);
+    .route("/login")
+    .post(validateUserDataAdvance(["email", "password"]), handlePostUserLogin);
 
 // Export the router instance
 export default router;
