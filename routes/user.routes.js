@@ -1,5 +1,5 @@
 import { Router } from "express"; // Import Express Router
-import { handleGetAllUsers } from "../controllers/user.controller.js";
+import { handleGetAllUsers, handleGetUserById } from "../controllers/user.controller.js";
 
 const router = Router(); // Create an instance of Express Router
 
@@ -7,7 +7,7 @@ const router = Router(); // Create an instance of Express Router
 router.route("/").get(handleGetAllUsers);
 
 // GET - Get user by ID
-// router.route("/users/:id").get(handleGetUserById);
+router.route("/:id").get(handleGetUserById);
 
 // Export the router instance
 export default router;
