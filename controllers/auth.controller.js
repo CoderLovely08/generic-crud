@@ -1,4 +1,5 @@
 import prisma from "../config/db.config.js";
+import { generateHashedPassword } from "../utils/common.utils.js";
 
 export const handlePostUserRegistration = async (req, res) => {
     try {
@@ -9,7 +10,7 @@ export const handlePostUserRegistration = async (req, res) => {
             where: {
                 user_email: email,
             },
-        });        
+        });
 
         if (user) {
             return res.status(400).json({
@@ -18,12 +19,21 @@ export const handlePostUserRegistration = async (req, res) => {
             });
         }
 
+        const hashedPassword = await generateHashedPassword(password);
+
+        if (!hashedPassword.success) {
+            return res.status(500).json({
+                success: false,
+                message: "Internal server error",
+            });
+        }
+
         // Create a new user
         await prisma.userInfo.create({
             data: {
                 user_name: name,
                 user_email: email,
-                user_password: password,
+                user_password: hashedPassword?.data,
             },
         });
 
@@ -32,7 +42,7 @@ export const handlePostUserRegistration = async (req, res) => {
             message: "User registration successful",
         });
     } catch (error) {
-        console.error(`Error in handlePostUserRegistration: ${error.message}`);        
+        console.error(`Error in handlePostUserRegistration: ${error.message}`);
         return res.status(500).json({
             success: false,
             message: "Internal server error",
