@@ -17,6 +17,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 // Routes
 import authRoutes from "./routes/auth.routes.js";
+import userRoutes from "./routes/user.routes.js";
 
 app.get("/", (req, res) => {
     try {
@@ -33,7 +34,10 @@ app.get("/", (req, res) => {
 });
 
 // Use the authRoutes
-app.use("/auth", authRoutes);
+app.use("/api/auth", authRoutes);
+
+// Use the userRoutes
+app.use("/api/users", userRoutes);
 
 // 404 Route
 app.use((req, res, next) => {
