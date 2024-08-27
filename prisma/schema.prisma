@@ -12,3 +12,24 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model UserInfo {
+  user_id        Int   @id @default(autoincrement())
+  user_name      String   @unique
+  user_email     String   @unique
+  user_password  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  crudItems CrudItem[]
+}
+
+model CrudItem {
+  item_id        Int   @id @default(autoincrement())
+  item_name      String   @unique
+  item_price     Int?   
+  item_quantity  Int?
+  user_id        Int
+  user           UserInfo @relation(fields: [user_id], references: [user_id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
