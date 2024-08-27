@@ -128,5 +128,8 @@ Errors are handled consistently throughout the API. Each response includes a `su
 
 Ensure you handle these errors appropriately in your client-side applications to provide a good user experience.
 
+## Instructions
+- You can only make 100 requests every 5min per IP
+
 ## Contribution
 Feel free to fork the repository and make any additional changes and create a pull request to improve the project😊
