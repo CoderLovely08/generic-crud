@@ -78,7 +78,7 @@ export const handleUpdateUserById = async (req, res) => {
                 success: false,
                 message: "User not found",
             });
-        }        
+        }
 
         const user = await prisma.userInfo.update({
             where: {
@@ -89,7 +89,7 @@ export const handleUpdateUserById = async (req, res) => {
                 user_email: email,
             },
         });
-  
+
         return res.status(200).json({
             success: true,
             message: "User updated successfully",
@@ -97,6 +97,47 @@ export const handleUpdateUserById = async (req, res) => {
         });
     } catch (error) {
         console.error(`Error in handleUpdateUserById: ${error.message}`);
+        return res.status(500).json({
+            success: false,
+            message: "Internal server error",
+        });
+    }
+};
+
+/**
+ * Delete a user by ID
+ * @route DELETE /api/users/:id
+ */
+export const handleDeleteUserById = async (req, res) => {
+    try {
+        const { id } = req?.params;
+
+        // Check if user exists
+        const userExists = await prisma.userInfo.findUnique({
+            where: {
+                user_id: parseInt(id),
+            },
+        });
+
+        if (!userExists) {
+            return res.status(404).json({
+                success: false,
+                message: "User not found",
+            });
+        }
+
+        await prisma.userInfo.delete({
+            where: {
+                user_id: parseInt(id),
+            },
+        });
+
+        return res.status(200).json({
+            success: true,
+            message: "User deleted successfully",
+        });
+    } catch (error) {
+        console.error(`Error in handleDeleteUserById: ${error.message}`);
         return res.status(500).json({
             success: false,
             message: "Internal server error",
