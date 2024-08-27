@@ -1,5 +1,5 @@
 import { Router } from "express"; // Import Express Router
-import { validateUserRegistration } from "../middlewares/auth.middleware.js";
+import { validateUserData } from "../middlewares/auth.middleware.js";
 import { handlePostUserRegistration } from "../controllers/auth.controller.js";
 
 const router = Router(); // Create an instance of Express Router
@@ -22,7 +22,7 @@ router.get("/", (req, res) => {
 // User registration route
 router
     .route("/register")
-    .post(validateUserRegistration, handlePostUserRegistration);
+    .post(validateUserData, handlePostUserRegistration);
 
 // Export the router instance
 export default router;

@@ -1,5 +1,13 @@
 import { Router } from "express"; // Import Express Router
-import { handleGetAllUsers, handleGetUserById } from "../controllers/user.controller.js";
+import {
+    handleGetAllUsers,
+    handleGetUserById,
+    handleUpdateUserById,
+} from "../controllers/user.controller.js";
+import {
+    validateUserData,
+    validateUserDataAdvance,
+} from "../middlewares/auth.middleware.js";
 
 const router = Router(); // Create an instance of Express Router
 
@@ -7,7 +15,10 @@ const router = Router(); // Create an instance of Express Router
 router.route("/").get(handleGetAllUsers);
 
 // GET - Get user by ID
-router.route("/:id").get(handleGetUserById);
+router
+    .route("/:id")
+    .get(handleGetUserById)
+    .put(validateUserDataAdvance(["name", "email"]), handleUpdateUserById);
 
 // Export the router instance
 export default router;
