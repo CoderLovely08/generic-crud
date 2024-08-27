@@ -3,7 +3,7 @@ import { generateHashedPassword } from "../utils/common.utils.js";
 
 export const handlePostUserRegistration = async (req, res) => {
     try {
-        const { name, email } = req.body;
+        const { name, email, password } = req.body;
 
         // Check if the user already exists
         const user = await prisma.userInfo.findUnique({
