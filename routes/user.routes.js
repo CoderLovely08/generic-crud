@@ -6,6 +6,7 @@ import {
     handleUpdateUserById,
 } from "../controllers/user.controller.js";
 import {
+    validateToken,
     validateUserData,
     validateUserDataAdvance,
 } from "../middlewares/auth.middleware.js";
@@ -13,14 +14,18 @@ import {
 const router = Router(); // Create an instance of Express Router
 
 // GET - Get all users
-router.route("/").get(handleGetAllUsers);
+router.route("/").get(validateToken, handleGetAllUsers);
 
 // GET - Get user by ID
 router
     .route("/:id")
-    .get(handleGetUserById)
-    .put(validateUserDataAdvance(["name", "email"]), handleUpdateUserById)
-    .delete(handleDeleteUserById);
+    .get(validateToken, handleGetUserById)
+    .put(
+        validateToken,
+        validateUserDataAdvance(["name", "email"]),
+        handleUpdateUserById
+    )
+    .delete(validateToken, handleDeleteUserById);
 
 // Export the router instance
 export default router;

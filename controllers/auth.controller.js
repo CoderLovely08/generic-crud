@@ -106,6 +106,12 @@ export const handlePostUserLogin = async (req, res) => {
             });
         }
 
+        res.cookie("token", tokenResult?.data, {
+            maxAge: 1000 * 60 * 60,
+            httpOnly: true,
+            secure: process.env.NODE_ENV == "prod",
+        });
+
         return res.status(200).json({
             success: true,
             message: "User logged in successfully",

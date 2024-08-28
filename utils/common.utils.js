@@ -52,3 +52,20 @@ export const generateJwtToken = (payload) => {
         };
     }
 };
+
+// Method to decode a jwt token
+export const decodeJwtToken = (token) => {
+    try {
+        const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
+        return {
+            success: true,
+            data: decoded,
+        };
+    } catch (error) {
+        console.error(`Error in decodeJwtToken: ${error.message}`);
+        return {
+            success: false,
+            message: error.message,
+        };
+    }
+};

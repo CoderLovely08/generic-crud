@@ -1,5 +1,6 @@
 import express from "express";
 import bodyParser from "body-parser";
+import cookieParser from "cookie-parser";
 
 import "dotenv/config";
 
@@ -13,6 +14,7 @@ app.use(express.json());
 app.use(express.static("public"));
 
 app.use(bodyParser.json());
+app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // Rate limiter
