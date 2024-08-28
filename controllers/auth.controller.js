@@ -86,7 +86,7 @@ export const handlePostUserLogin = async (req, res) => {
             user.user_password
         );
 
-        if (!isPasswordValid) {
+        if (!isPasswordValid.success) {
             return res.status(400).json({
                 success: false,
                 message: "Invalid password",

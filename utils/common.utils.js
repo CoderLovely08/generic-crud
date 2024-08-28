@@ -21,7 +21,7 @@ export const comparePassword = async (password, hashedPassword) => {
     try {
         const isPasswordValid = await bcrypt.compare(password, hashedPassword);
         return {
-            success: true,
+            success: isPasswordValid,
             data: isPasswordValid,
         };
     } catch (error) {
