@@ -13,12 +13,12 @@ const PORT = process.env.PORT;
 // Setup middlewares
 app.use(express.json());
 app.use(express.static("public"));
-app.use(
-    cors({
-        origin: ["http://localhost:5173"],
-        credentials: true,
-    })
-);
+// app.use(
+//     cors({
+//         origin: ["http://localhost:5173"],
+//         credentials: true,
+//     })
+// );
 
 app.use(bodyParser.json());
 app.use(cookieParser());
@@ -35,6 +35,7 @@ app.use(limiter);
 // Routes
 import authRoutes from "./routes/auth.routes.js";
 import userRoutes from "./routes/user.routes.js";
+import apiRoutes from "./routes/api.routes.js";
 
 app.get("/", (req, res) => {
     try {
@@ -93,6 +94,9 @@ app.use("/api/auth", authRoutes);
 
 // Use the userRoutes
 app.use("/api/users", userRoutes);
+
+// Use the apiRoutes
+app.use("/api", apiRoutes);
 
 // 404 Route
 app.use((req, res, next) => {

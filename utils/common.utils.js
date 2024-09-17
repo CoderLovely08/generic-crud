@@ -35,10 +35,14 @@ export const comparePassword = async (password, hashedPassword) => {
 
 // Method to generate a jwt token
 import jwt from "jsonwebtoken";
-export const generateJwtToken = (payload) => {
+import { TOKEN_TYPES } from "./constants.js";
+export const generateJwtToken = (payload, tokenType = TOKEN_TYPES.ACCESS) => {
     try {
-        const token = jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET, {
-            expiresIn: "15min",
+
+        const secret = tokenType === TOKEN_TYPES.ACCESS ? process.env.ACCESS_TOKEN_SECRET : process.env.REFRESH_TOKEN_SECRET;
+
+        const token = jwt.sign(payload, secret, {
+            expiresIn: tokenType === TOKEN_TYPES.ACCESS ? "15m" : "7d",
         });
         return {
             success: true,
@@ -54,9 +58,14 @@ export const generateJwtToken = (payload) => {
 };
 
 // Method to decode a jwt token
-export const decodeJwtToken = (token) => {
+export const decodeJwtToken = (token, tokenType = TOKEN_TYPES.ACCESS) => {
     try {
-        const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
+        const secret =
+            tokenType === TOKEN_TYPES.ACCESS
+                ? process.env.ACCESS_TOKEN_SECRET
+                : process.env.REFRESH_TOKEN_SECRET;
+
+        const decoded = jwt.verify(token, secret);
         return {
             success: true,
             data: decoded,

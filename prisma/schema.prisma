@@ -21,6 +21,7 @@ model UserInfo {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   crudItems CrudItem[]
+  userSessions UserSession[]
 }
 
 model CrudItem {
@@ -28,6 +29,15 @@ model CrudItem {
   item_name      String   @unique
   item_price     Int?   
   item_quantity  Int?
+  user_id        Int
+  user           UserInfo @relation(fields: [user_id], references: [user_id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model UserSession {
+  session_id     Int   @id @default(autoincrement())
+  session_token  String   @unique
   user_id        Int
   user           UserInfo @relation(fields: [user_id], references: [user_id])
   createdAt DateTime @default(now())
