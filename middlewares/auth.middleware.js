@@ -7,7 +7,7 @@ export const validateUserData = async (req, res, next) => {
         const { name, email, password } = req.body;
 
         // Check if name is provided
-        if (!name || !validator.isAlpha(name)) {
+        if (!name || !validator.isAlpha(name.replace(/\s/g, ""))) {
             return res.status(400).json({
                 success: false,
                 message: "Name is required",

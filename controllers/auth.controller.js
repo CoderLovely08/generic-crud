@@ -107,9 +107,10 @@ export const handlePostUserLogin = async (req, res) => {
         }
 
         res.cookie("token", tokenResult?.data, {
-            maxAge: 1000 * 60 * 60,
+            maxAge: 1000 * 60 * 60 * 30 * 24,
             httpOnly: true,
-            secure: process.env.NODE_ENV == "prod",
+            secure: true,
+            sameSite: "none",
         });
 
         return res.status(200).json({
