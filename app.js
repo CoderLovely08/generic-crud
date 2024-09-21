@@ -13,12 +13,12 @@ const PORT = process.env.PORT;
 // Setup middlewares
 app.use(express.json());
 app.use(express.static("public"));
-// app.use(
-//     cors({
-//         origin: ["http://localhost:5173"],
-//         credentials: true,
-//     })
-// );
+app.use(
+    cors({
+        origin: ["http://localhost:5173"],
+        credentials: true,
+    })
+);
 
 app.use(bodyParser.json());
 app.use(cookieParser());
@@ -36,6 +36,12 @@ app.use(limiter);
 import authRoutes from "./routes/auth.routes.js";
 import userRoutes from "./routes/user.routes.js";
 import apiRoutes from "./routes/api.routes.js";
+
+// Middleware to log the request
+app.use((req, res, next) => {
+    console.log(`${req.method} ${req.originalUrl}`);
+    next();
+});
 
 app.get("/", (req, res) => {
     try {

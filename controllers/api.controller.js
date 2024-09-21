@@ -65,17 +65,30 @@ export const handleGetRefreshJwtToken = async (req, res) => {
             },
         });
 
+        const userData = await prisma.userInfo.findUnique({
+            where: {
+                user_id: decoded.data.user_id,
+            },
+        });
+
         res.cookie("token", accessTokenResult?.data, {
+            maxAge: 15 * 60 * 1000,
             httpOnly: true,
+            secure: true,
+            sameSite: "none",
         });
 
         res.cookie("refreshToken", refreshTokenResult?.data, {
             httpOnly: true,
+            maxAge: 7 * 24 * 60 * 60 * 1000,
+            secure: true,
+            sameSite: "none",
         });
 
         return res.status(200).json({
             success: true,
             message: "Token refreshed successfully",
+            data: userData,
             token: accessTokenResult?.data,
             refreshToken: refreshTokenResult?.data,
         });

@@ -42,7 +42,7 @@ export const generateJwtToken = (payload, tokenType = TOKEN_TYPES.ACCESS) => {
         const secret = tokenType === TOKEN_TYPES.ACCESS ? process.env.ACCESS_TOKEN_SECRET : process.env.REFRESH_TOKEN_SECRET;
 
         const token = jwt.sign(payload, secret, {
-            expiresIn: tokenType === TOKEN_TYPES.ACCESS ? "15m" : "7d",
+            expiresIn: tokenType === TOKEN_TYPES.ACCESS ? "15min" : "7d",
         });
         return {
             success: true,

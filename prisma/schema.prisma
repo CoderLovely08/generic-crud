@@ -15,7 +15,7 @@ datasource db {
 
 model UserInfo {
   user_id        Int   @id @default(autoincrement())
-  user_name      String   @unique
+  user_name      String
   user_email     String   @unique
   user_password  String
   createdAt DateTime @default(now())

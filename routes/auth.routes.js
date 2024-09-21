@@ -5,6 +5,7 @@ import {
 } from "../middlewares/auth.middleware.js";
 import {
     handlePostUserLogin,
+    handlePostUserLogout,
     handlePostUserRegistration,
 } from "../controllers/auth.controller.js";
 
@@ -32,6 +33,9 @@ router.route("/register").post(validateUserData, handlePostUserRegistration);
 router
     .route("/login")
     .post(validateUserDataAdvance(["email", "password"]), handlePostUserLogin);
+
+// User logout route
+router.post("/logout", handlePostUserLogout);
 
 // Export the router instance
 export default router;

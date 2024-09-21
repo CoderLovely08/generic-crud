@@ -99,7 +99,10 @@ export const handlePostUserLogin = async (req, res) => {
         };
         // Generate a JWT token
         const tokenResult = generateJwtToken(payload, TOKEN_TYPES.ACCESS);
-        const refreshTokenResult = generateJwtToken(payload, TOKEN_TYPES.REFRESH);
+        const refreshTokenResult = generateJwtToken(
+            payload,
+            TOKEN_TYPES.REFRESH
+        );
 
         if (!tokenResult.success || !refreshTokenResult.success) {
             return res.status(500).json({
@@ -121,8 +124,8 @@ export const handlePostUserLogin = async (req, res) => {
                 user_id: user.user_id,
                 session_token: refreshTokenResult?.data,
             },
-        })
-        
+        });
+
         // Set the token in the cookie
         res.cookie("token", tokenResult?.data, {
             maxAge: 1000 * 60 * 60 * 30 * 24,
@@ -141,11 +144,45 @@ export const handlePostUserLogin = async (req, res) => {
         return res.status(200).json({
             success: true,
             message: "User logged in successfully",
+            data: user,
             token: tokenResult?.data,
             refreshToken: refreshTokenResult?.data,
         });
     } catch (error) {
         console.error(`Error in handlePostUserLogin: ${error.message}`);
+        return res.status(500).json({
+            success: false,
+            message: "Internal server error",
+        });
+    }
+};
+
+/**
+ * Handle user logout
+ * @route POST /api/auth/logout
+ */
+export const handlePostUserLogout = async (req, res) => {
+    try {
+        const { refreshToken } = req.cookies;
+
+        if (refreshToken) {
+            // Delete the user session
+            await prisma.userSession.delete({
+                where: {
+                    session_token: refreshToken,
+                },
+            });
+        }
+
+        res.clearCookie("token");
+        res.clearCookie("refreshToken");
+
+        return res.status(200).json({
+            success: true,
+            message: "User logged out successfully",
+        });
+    } catch (error) {
+        console.error(`Error in handlePostUserLogout: ${error.message}`);
         return res.status(500).json({
             success: false,
             message: "Internal server error",
